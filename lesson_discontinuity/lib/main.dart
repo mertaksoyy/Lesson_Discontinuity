@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lesson_discontinuity/DbModel/dbDao.dart';
+import 'package:lesson_discontinuity/LessonDetail.dart';
 import 'package:lesson_discontinuity/Lessons.dart';
 import 'AddLesson.dart';
 
@@ -32,52 +33,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
 
-  /*void dersEklePopup() {
-    var lessonController = TextEditingController();
-    //bool errorMessage = false;
-    showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Ders Ekle"),
-        content: SingleChildScrollView(
-            child:
-            TextField(
-              controller: lessonController,
-              decoration: InputDecoration(
-                //errorText: (errorMessage) ? "Can't Empty" : null,
-                labelText: "Ders Kodu Giriniz",
-              ),
-            )
-        ),
-        actions: [
-          ElevatedButton(
-            child: const Text("Ders Ekle"),
-            onPressed: () {
-              addLesson(lessonController.toString());
-              Navigator.pop(context);
-              print("okundu");
-              /*if(lessonController.text.isEmpty){
-                setState(() => errorMessage = true);
-              }
-              else{
-                setState(() {
-                });
-              }
-
-               */
-            },
-          ),
-          ElevatedButton(
-            child: const Text("İptal"),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      );
-    }
-    );
-  }
-   */
-
-
   Future<List<Lessons>> getAll() async{
     var lessonList = await dbDao().allLesson();
     return lessonList;
@@ -93,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Devamsızlık Takip Uygulaması"),
+        title: const Text("Lesson Discontinuity App"),
       ),
       body:FutureBuilder<List<Lessons>>(
         future: getAll(),
@@ -104,22 +59,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: getList!.length,
                 itemBuilder: (context,indeks){
                   var list = getList[indeks];
-                  return Card(
-                    child: SizedBox(height: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(list.ders_id.toString()),
-                          Text(list.ders_ad,style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(list.ders_devamsizlik.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                          ElevatedButton(
-                            child: const Icon(Icons.add),
-                            onPressed: (){
-                              setState(() {
-                              });
-                            },
-                          )
-                        ],
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LessonDetail(lesson: list,)));
+                    },
+                    child:Card(
+                      child: SizedBox(height: 60,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            //Text(list.ders_id.toString()),
+                            Text(list.ders_ad,style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text(list.ders_devamsizlik.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: (){
+                                delete(list.ders_id);
+                              },
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -130,12 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         },
       ),
-      floatingActionButton:FloatingActionButton(
-        child:Icon(Icons.add),
-        tooltip: "Ekle",
+      floatingActionButton:FloatingActionButton.extended(
+        icon:Icon(Icons.add),
+        label: Text("Add"),
+        tooltip: "Add",
         onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  AddLesson()));
-          //dersEklePopup();
         },
       ),
     );

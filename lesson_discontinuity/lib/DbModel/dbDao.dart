@@ -27,9 +27,14 @@ class dbDao{
   Future<void> removeLesson(int lesson_id) async{
     var db = await dbHelper.dbAccess();
     await db.delete("dersler",where: "ders_id=?" ,whereArgs: [lesson_id]);
-    /*var userInput = Map<String,dynamic>();
-    userInput["lesson_id"] = lesson_id;
+  }
 
-     */
+  Future<void> updateLesson(int lessonId,String lessonCode,int lessonDiscontinuity) async{
+    var db = await dbHelper.dbAccess();
+
+    var information = Map<String,dynamic>();
+    information["ders_ad"] = lessonCode;
+    information["ders_devamsizlik"] = lessonDiscontinuity;
+    await db.update("dersler", information ,where: "ders_id=?",whereArgs: [lessonId]);
   }
 }
