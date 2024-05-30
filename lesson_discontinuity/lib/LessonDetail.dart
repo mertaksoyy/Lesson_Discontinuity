@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lesson_discontinuity/DbModel/dbDao.dart';
-import 'package:lesson_discontinuity/data/entity/Lessons.dart';
+import 'package:lesson_discontinuity/Lessons.dart';
 import 'package:lesson_discontinuity/main.dart';
 
 class LessonDetail extends StatefulWidget {
