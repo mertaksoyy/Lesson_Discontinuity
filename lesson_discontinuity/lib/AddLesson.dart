@@ -13,16 +13,18 @@ class _AddLessonState extends State<AddLesson> {
   TextEditingController tflessonCode = TextEditingController();
   TextEditingController tflessonDiscontinuity = TextEditingController();
 
-  Future<void> addLesson(String lessonCode,int lessonDiscontinuity) async{
-    await dbDao().addLesson(lessonCode,lessonDiscontinuity);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+  Future<void> addLesson(String lessonCode, int lessonDiscontinuity) async {
+    await dbDao().addLesson(lessonCode, lessonDiscontinuity);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MyHomePage()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Ders Ekleme"),),
-
+      appBar: AppBar(
+        title: Text("Ders Ekleme"),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
@@ -31,22 +33,30 @@ class _AddLessonState extends State<AddLesson> {
             children: [
               TextField(
                 controller: tflessonCode,
-                decoration: InputDecoration(labelText: "Ders Kodu Giriniz",),
+                decoration: InputDecoration(
+                  labelText: "Ders Kodu Giriniz",
+                ),
               ),
               TextField(
                 controller: tflessonDiscontinuity,
-                decoration: InputDecoration(labelText: "Ders Devamsızlık Sayısını Girin",),
+                decoration: InputDecoration(
+                  labelText: "Ders Devamsızlık Sayısını Girin",
+                ),
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton:FloatingActionButton(
-        child:Icon(Icons.save),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.save),
         tooltip: "Kaydet",
-        onPressed: (){
-          discontinuity = int.parse(tflessonDiscontinuity.text);
-          addLesson(tflessonCode.text, discontinuity);
+        onPressed: () {
+          if (tflessonCode.text.isEmpty || tflessonDiscontinuity.text.isEmpty) {
+            print("lütfen boş bırakma");
+          } else {
+            discontinuity = int.parse(tflessonDiscontinuity.text);
+            addLesson(tflessonCode.text, discontinuity);
+          }
         },
       ),
     );
